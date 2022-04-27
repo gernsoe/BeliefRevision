@@ -698,3 +698,9 @@ class PriorityQueue(Queue):
             return self.A.pop(0)[1]
         else:
             return self.A.pop()[1]
+
+Expr()
+Implication(And(P,Q),Or(Q,P))
+(P & Q) -> (P | Q)
+>>
+&

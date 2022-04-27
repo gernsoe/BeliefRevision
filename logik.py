@@ -13,9 +13,9 @@ class PropKB:
     def tell(self, sentence):
         "Add the sentence's clauses to the KB"
         if isinstance(sentence, str):
-            sentence = expr(sentence)
+            sentence = expr(conjuncts(sentence))
         # self.clauses.extend(conjuncts(to_cnf(sentence)))
-        self.clauses.extend(sentence)
+        self.clauses.append(sentence)
 
     '''
     def ask_generator(self, query):
@@ -42,7 +42,8 @@ class Expr:
         Expr with 'F' as op and the args as arguments."""
         return Expr(self.op, *args)
 
-    '''
+
+
     def __repr__(self):
         "Show something like 'P' or 'P(x, y)', or '~P' or '(P & Q) >> (Q & P)'"
         if len(self.args) == 0: # Constant or proposition with arity 0
@@ -54,6 +55,7 @@ class Expr:
         else: # Infix operator
             return '(%s)' % (' '+self.op+' ').join(map(repr, self.args))
 
+    '''
     def __eq__(self, other):
         """x and y are equal iff their ops and args are equal."""
         return (other is self) or (isinstance(other, Expr)
@@ -72,9 +74,27 @@ class Expr:
     def __xor__(self, other):    return Expr('^',  self, other)
     def __mod__(self, other):    return Expr('<=>',  self, other)
 
+
+
 def expr(s):
     if isinstance(s, Expr): return s
     ## Replace a symbol or number, such as 'P' with 'Expr("P")'
     s = re.sub(r'([a-zA-Z0-9_.]+)', r'Expr("\1")', s)
     ## Now eval the string.  (A security hole; do not use with an adversary.)
     return eval(s, {'Expr':Expr})
+
+def conjuncts(s):
+    """Return a list of the conjuncts in the sentence s.
+    >>> conjuncts(A & B)
+    [A, B]
+    >>> conjuncts(A | B)
+    [(A | B)]
+    """
+    if isinstance(s, Expr) and s.op == '&':
+        return s.args
+    else:
+        return [s]
+
+def is_symbol(s):
+    "A string s is a symbol if it starts with an alphabetic char."
+    return isinstance(s, str) and s[0].isalpha()

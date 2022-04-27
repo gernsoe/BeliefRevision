@@ -163,7 +163,7 @@ class Expr:
     def __gt__(self, other):     return Expr('>',  self, other)
     def __add__(self, other):    return Expr('+',  self, other)
     def __sub__(self, other):    return Expr('-',  self, other)
-    def __and__(self, other):    return Expr('&',  self, other)
+    def __and__(self, other):    return And(self, other)
     def __div__(self, other):    return Expr('/',  self, other)
     def __truediv__(self, other):return Expr('/',  self, other)
     def __invert__(self):        return Expr('~',  self)
