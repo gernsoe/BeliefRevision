@@ -310,18 +310,6 @@ def pl_true(exp, model={}):
 ## Convert to Conjunctive Normal Form (CNF)
 
 def to_cnf(s):
-    """Convert a propositional logical sentence s to conjunctive normal form.
-    That is, of the form ((A | ~B | ...) & (B | C | ...) & ...) [p. 215]
-    >>> to_cnf("~(B|C)")
-    (~B & ~C)
-    >>> to_cnf("B <=> (P1|P2)")
-    ((~P1 | B) & (~P2 | B) & (P1 | P2 | ~B))
-    >>> to_cnf("a | (b & c) | d")
-    ((b | a | d) & (c | a | d))
-    >>> to_cnf("A & (B | (D & E))")
-    (A & (D | B) & (E | B))
-    """
-    if isinstance(s, str): s = expr(s)
     s = eliminate_implications(s) # Steps 1, 2 from p. 215
     s = move_not_inwards(s) # Step 3
     return distribute_and_over_or(s) # Step 4
