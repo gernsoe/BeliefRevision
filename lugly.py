@@ -1,6 +1,6 @@
 from string import ascii_uppercase
 from string import ascii_lowercase
-
+z
 class Proposition:
     def __init__(self, op, *vars):
         self.op = str(op)
