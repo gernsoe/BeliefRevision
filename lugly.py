@@ -1,6 +1,17 @@
 from string import ascii_uppercase
 from string import ascii_lowercase
-z
+class BB:
+    def __init__(self):
+        self.clauses = []
+
+    def tell(self, prop):
+        cnf = convert_to_cnf(prop)
+        for clause in cnf:
+            self.clauses.append(clause)
+
+    def entails(self, prop):
+
+
 class Proposition:
     def __init__(self, op, *vars):
         self.op = str(op)
