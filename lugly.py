@@ -9,8 +9,6 @@ class BB:
         for clause in cnf:
             self.clauses.append(clause)
 
-    def entails(self, prop):
-
 
 class Proposition:
     def __init__(self, op, *vars):
@@ -64,6 +62,23 @@ def convert_to_cnf(E):
     cnf = negation_inwards(cnf)
     cnf = distribute(cnf)
     return cnf
+
+
+def to_clauses(cnf):
+    result = []
+    clauses_helper(cnf, result)
+    return result
+
+
+def clauses_helper(cnf, clauses):
+    if is_variable(cnf):
+        if cnf.op == '~':
+            return cnf.op + cnf.vars[0].op
+        return cnf.op
+    elif cnf.op == "v":
+        return clauses_helper(cnf.vars[0], clauses), clauses_helper(cnf.vars[1], clauses)
+    elif cnf.op == "^":
+        return clauses.append([*clauses_helper(cnf.vars[0], clauses)]), clauses.append([*clauses_helper(cnf.vars[1], clauses)])
 
 
 def is_variable(E):
@@ -139,8 +154,12 @@ for c in kbcnf:
     print(c.tostring())
 '''
 
+test1 = Implies(Not(And(V("P"), Or(V("R"), V("S")))), Implies(Not(V("P")), V("Q")))
+test2 = Not(And(V("P"), And(V("R"), V("S"))))
 #print(test1.tostring())
-#CNF = eliminate(test4)
+CNF = convert_to_cnf(test1)
+print(CNF.tostring())
+print(to_clauses(CNF))
 #print(CNF.tostring())
 #CNF = negation_inwards(CNF)
 #print(CNF.tostring())
@@ -151,6 +170,6 @@ for c in kbcnf:
 for letter in ascii_uppercase[:22]:
     exec("{} = V('{}')".format(letter, letter))
 
-e = input()
-p = eval(e)
-print(p.tostring())
+#e = input()
+#p = eval(e)
+#print(p.tostring())
