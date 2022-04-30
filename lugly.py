@@ -61,25 +61,31 @@ def convert_to_cnf(E):
     cnf = eliminate(E)
     cnf = negation_inwards(cnf)
     cnf = distribute(cnf)
+    cnf = cnf_to_clauses(cnf)
     return cnf
 
-
-def to_clauses(cnf):
+def cnf_to_clauses(cnf):
+    cnf = cnf.tostring()
+    cnf = cnf.replace("(", "")
+    cnf = cnf.replace(")", "")
+    cnf = cnf.replace("v", "")
+    negate_next = False
     result = []
-    clauses_helper(cnf, result)
+    smallerArray = []
+    for char in cnf:
+        if char is "~":
+            negate_next = True
+        elif char is not "^":
+            if negate_next:
+                smallerArray.append("~" + char)
+                negate_next = False
+            else:
+                smallerArray.append(char)
+        else:
+            result.append(smallerArray)
+            smallerArray = []
+    result.append(smallerArray)
     return result
-
-
-def clauses_helper(cnf, clauses):
-    if is_variable(cnf):
-        if cnf.op == '~':
-            return cnf.op + cnf.vars[0].op
-        return cnf.op
-    elif cnf.op == "v":
-        return clauses_helper(cnf.vars[0], clauses), clauses_helper(cnf.vars[1], clauses)
-    elif cnf.op == "^":
-        return clauses.append([*clauses_helper(cnf.vars[0], clauses)]), clauses.append([*clauses_helper(cnf.vars[1], clauses)])
-
 
 def is_variable(E):
     return len(E.tostring()) <= 2 # Variable string is only 1 long
@@ -154,12 +160,12 @@ for c in kbcnf:
     print(c.tostring())
 '''
 
-test1 = Implies(Not(And(V("P"), Or(V("R"), V("S")))), Implies(Not(V("P")), V("Q")))
-test2 = Not(And(V("P"), And(V("R"), V("S"))))
+test1 = Implies(Not(And(V("P"), Or(Not(V("R")), V("S")))), Implies(Not(V("P")), V("Q")))
+test2 = Not(And(V("P"), And(Not(V("R")), V("S"))))
 #print(test1.tostring())
-CNF = convert_to_cnf(test1)
-print(CNF.tostring())
-print(to_clauses(CNF))
+CNF = convert_to_cnf(test2)
+print(CNF)
+#print(to_clauses(CNF))
 #print(CNF.tostring())
 #CNF = negation_inwards(CNF)
 #print(CNF.tostring())
