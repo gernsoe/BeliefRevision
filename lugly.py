@@ -9,6 +9,36 @@ class BB:
         for clause in cnf:
             self.clauses.append(clause)
 
+    def entails(self, query):
+        clauses = []
+        clauses.extend(self.clauses)
+        query = Not(query)
+        query = convert_to_cnf(query)
+        clauses.extend(query)
+        new_knowledge = []
+        while True:
+            for clause1, clause2 in zip(clauses, clauses[1:]):
+                resolvent = self.resolve(clause1, clause2)
+                if self.has_empty_clause(resolvent):
+                    return True
+                new_knowledge.append(resolvent)
+            if self.is_superset_of(new_knowledge):
+                return False
+            clauses.append(new_knowledge)
+
+    def has_empty_clause(self, resolvent):
+        for clause in resolvent:
+            if not clause:
+                return True
+        return False
+
+    def resolve(self, clause1, clause2):
+        pass
+
+    def is_superset_of(self, new_knowledge):
+        if(all(x in self.clauses for x in new_knowledge)):
+            return True
+        return False
 
 class Proposition:
     def __init__(self, op, *vars):
@@ -64,6 +94,7 @@ def convert_to_cnf(E):
     cnf = cnf_to_clauses(cnf)
     return cnf
 
+
 def cnf_to_clauses(cnf):
     cnf = cnf.tostring()
     cnf = cnf.replace("(", "")
@@ -86,6 +117,7 @@ def cnf_to_clauses(cnf):
             smallerArray = []
     result.append(smallerArray)
     return result
+
 
 def is_variable(E):
     return len(E.tostring()) <= 2 # Variable string is only 1 long
@@ -165,6 +197,11 @@ test2 = Not(And(V("P"), And(Not(V("R")), V("S"))))
 #print(test1.tostring())
 CNF = convert_to_cnf(test2)
 print(CNF)
+bb = BB()
+bb.tell(test2)
+bb.entails(V("P"))
+print("Bb:")
+print(bb.clauses)
 #print(to_clauses(CNF))
 #print(CNF.tostring())
 #CNF = negation_inwards(CNF)
