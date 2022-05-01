@@ -33,7 +33,14 @@ class BB:
         return False
 
     def resolve(self, clause1, clause2):
-        pass
+        clauses = []
+        for c1 in clause1:
+            for c2 in clause2:
+                if str(c1) == "~"+str(c2) or "~"+str(c1) == str(c2):
+                    c1_result = list(filter(lambda var: var != c1, clause1))
+                    c2_result = list(filter(lambda var: var != c2, clause2))
+                    clauses.append(list(set(c1_result, c2_result)))
+        return clauses
 
     def is_superset_of(self, new_knowledge):
         if(all(x in self.clauses for x in new_knowledge)):
@@ -194,12 +201,13 @@ for c in kbcnf:
 
 test1 = Implies(Not(And(V("P"), Or(Not(V("R")), V("S")))), Implies(Not(V("P")), V("Q")))
 test2 = Not(And(V("P"), And(Not(V("R")), V("S"))))
+test3 = And(V("P"), V("Q"))
 #print(test1.tostring())
 CNF = convert_to_cnf(test2)
 print(CNF)
 bb = BB()
-bb.tell(test2)
-bb.entails(V("P"))
+bb.tell(test3)
+print(bb.entails(V("P")))
 print("Bb:")
 print(bb.clauses)
 #print(to_clauses(CNF))
