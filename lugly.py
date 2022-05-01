@@ -16,17 +16,30 @@ class BB:
         query = convert_to_cnf(query)
         clauses.extend(query)
         new_knowledge = []
+        all_combinations = self.combine_elements(clauses)
         while True:
-            for clause1, clause2 in zip(clauses, clauses[1:]):
-                resolvent = self.resolve(clause1, clause2)
-                if self.has_empty_clause(resolvent):
-                    return True
-                new_knowledge.append(resolvent)
+            for clause1, clause2 in all_combinations:
+                changed, resolvents = self.resolve(clause1, clause2)
+                if changed:
+                    if self.has_empty_clause(resolvents):
+                        return True
+                    new_knowledge.append(resolvents)
             if self.is_superset_of(new_knowledge):
                 return False
-            clauses.append(new_knowledge)
+            if new_knowledge:
+                clauses.append(new_knowledge)
+
+    def combine_elements(self, clauses):
+        result = []
+        length = len(clauses)
+        for i in range(length):
+            for j in range(i + 1, length):
+                result.append((clauses[i], clauses[j]))
+        return result
 
     def has_empty_clause(self, resolvent):
+        if not resolvent:
+            return True
         for clause in resolvent:
             if not clause:
                 return True
@@ -34,18 +47,29 @@ class BB:
 
     def resolve(self, clause1, clause2):
         clauses = []
+        changed = False
         for c1 in clause1:
             for c2 in clause2:
                 if str(c1) == "~"+str(c2) or "~"+str(c1) == str(c2):
                     c1_result = list(filter(lambda var: var != c1, clause1))
                     c2_result = list(filter(lambda var: var != c2, clause2))
-                    clauses.append(list(set(c1_result, c2_result)))
-        return clauses
+                    c1_result.extend(c2_result)
+                    result = self.remove_dubs(c1_result)
+                    clauses.extend(result)
+                    changed = True
+        return changed, clauses
 
     def is_superset_of(self, new_knowledge):
         if(all(x in self.clauses for x in new_knowledge)):
             return True
         return False
+
+    def remove_dubs(self, list):
+        result = []
+        for element in list:
+            if element not in result:
+                result.append(element)
+        return result
 
 class Proposition:
     def __init__(self, op, *vars):
@@ -202,14 +226,22 @@ for c in kbcnf:
 test1 = Implies(Not(And(V("P"), Or(Not(V("R")), V("S")))), Implies(Not(V("P")), V("Q")))
 test2 = Not(And(V("P"), And(Not(V("R")), V("S"))))
 test3 = And(V("P"), V("Q"))
+test4 = V("Q")
+sentence1 = Implies(Not(V("p")), V("q"))
+sentence2 = Implies(V("q"), V("p"))
+sentence3 = Implies(V("p"), And(V("r"), V("s")))
+query = And(V("p"), And(V("r"), V("s")))
 #print(test1.tostring())
 CNF = convert_to_cnf(test2)
 print(CNF)
 bb = BB()
-bb.tell(test3)
-print(bb.entails(V("P")))
+bb.tell(sentence1)
+bb.tell(sentence2)
+bb.tell(sentence3)
 print("Bb:")
 print(bb.clauses)
+print(bb.entails(query))
+
 #print(to_clauses(CNF))
 #print(CNF.tostring())
 #CNF = negation_inwards(CNF)
