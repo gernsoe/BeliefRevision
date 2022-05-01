@@ -16,18 +16,20 @@ class BB:
         query = convert_to_cnf(query)
         clauses.extend(query)
         new_knowledge = []
-        all_combinations = self.combine_elements(clauses)
         while True:
+            all_combinations = self.combine_elements(clauses)
             for clause1, clause2 in all_combinations:
                 changed, resolvents = self.resolve(clause1, clause2)
                 if changed:
                     if self.has_empty_clause(resolvents):
                         return True
-                    new_knowledge.append(resolvents)
+                    new_knowledge.extend(resolvents)
+                    new_knowledge = self.remove_dubs(new_knowledge)
             if self.is_superset_of(new_knowledge):
                 return False
             if new_knowledge:
-                clauses.append(new_knowledge)
+                clauses.extend(new_knowledge)
+                clauses = self.remove_dubs(clauses)
 
     def combine_elements(self, clauses):
         result = []
@@ -55,7 +57,7 @@ class BB:
                     c2_result = list(filter(lambda var: var != c2, clause2))
                     c1_result.extend(c2_result)
                     result = self.remove_dubs(c1_result)
-                    clauses.extend(result)
+                    clauses.append(result)
                     changed = True
         return changed, clauses
 
@@ -223,24 +225,36 @@ for c in kbcnf:
     print(c.tostring())
 '''
 
+
+#sentence = eval(input("Input sentence ").upper())
+#bb = BB()
+#bb.tell(sentence)
+#query = eval(input("Input query ").upper())
+#print(bb.entails(query))
+
+
+'''
 test1 = Implies(Not(And(V("P"), Or(Not(V("R")), V("S")))), Implies(Not(V("P")), V("Q")))
 test2 = Not(And(V("P"), And(Not(V("R")), V("S"))))
 test3 = And(V("P"), V("Q"))
 test4 = V("Q")
-sentence1 = Implies(Not(V("p")), V("q"))
-sentence2 = Implies(V("q"), V("p"))
-sentence3 = Implies(V("p"), And(V("r"), V("s")))
-query = And(V("p"), And(V("r"), V("s")))
+sentence1 = Implies(Not(V("P")), V("Q"))
+sentence2 = Implies(V("Q"), V("P"))
+sentence3 = Implies(V("P"), And(V("R"), V("S")))
+#query = And(V("P"), And(V("R"), V("S")))
 #print(test1.tostring())
 CNF = convert_to_cnf(test2)
 print(CNF)
 bb = BB()
 bb.tell(sentence1)
 bb.tell(sentence2)
-bb.tell(sentence3)
+bb.tell(test3)
 print("Bb:")
 print(bb.clauses)
+#print(bb.entails(V("P")))
 print(bb.entails(query))
+'''
+
 
 #print(to_clauses(CNF))
 #print(CNF.tostring())
@@ -248,10 +262,6 @@ print(bb.entails(query))
 #print(CNF.tostring())
 #CNF = distribute(test1)
 #print(CNF.tostring())
-
-
-for letter in ascii_uppercase[:22]:
-    exec("{} = V('{}')".format(letter, letter))
 
 #e = input()
 #p = eval(e)
