@@ -7,6 +7,13 @@ class BB:
     def __init__(self):
         self.clauses = []
 
+    def __copy__(self):
+        copy_bb = BB()
+        for prop in self.clauses:
+            copy_bb.clauses.append(prop)
+        return copy_bb
+
+
     def __repr__(self):
         str = ""
         for prop in self.clauses:
@@ -15,18 +22,20 @@ class BB:
 
     def tell(self, prop):
         self.clauses.append(prop)
+        self.remove_dubs(self.clauses)
         #for clause in cnf:
         #    self.clauses.append(clause)
 
-    def entails(self, knowledge, query):
+    def entails(self, knowledge, query=None):
         clauses = []
         for prop in knowledge:
             cnf = convert_to_cnf(prop)
             clauses.extend(cnf)
         #clauses.extend(self.clauses)
-        query = Not(query)
-        query = convert_to_cnf(query)
-        clauses.extend(query)
+        if not query == None:
+            query = Not(query)
+            query = convert_to_cnf(query)
+            clauses.extend(query)
         new_knowledge = []
         while True:
             all_combinations = self.combine_elements(clauses)
@@ -37,7 +46,7 @@ class BB:
                         return True
                     new_knowledge.extend(resolvents)
                     new_knowledge = self.remove_dubs(new_knowledge)
-            if self.is_superset_of(clauses, new_knowledge):
+            if self.is_subset(clauses, new_knowledge):
                 return False
             if new_knowledge:
                 clauses.extend(new_knowledge)
@@ -73,8 +82,8 @@ class BB:
                     changed = True
         return changed, clauses
 
-    def is_superset_of(self, cl, new_knowledge):
-        if(all(x in cl for x in new_knowledge)):
+    def is_subset(self, l, sub_l):
+        if(all(x in l for x in sub_l)):
             return True
         return False
 
@@ -94,6 +103,10 @@ class BB:
         for tup in powerset:
             if not self.entails(list(tup), phi):
                 anti.append(tup)
+
+        # If there are no subsets that don't entail phi, the new knowledge base should be empty.
+        if len(anti) == 0:
+            return []
 
         #now find all of those subsets, with the maximal size
         max_size = len(anti[-1])
@@ -326,10 +339,21 @@ bb = BB()
 bb.tell(sentence1)
 bb.tell(sentence2)
 bb.tell(sentence3)
+print(bb.entails(bb.clauses, query))
 
-print(bb)
-bb.expansion(query)
-print(bb)
+#print(bb)
+#bb.expansion(query)
+#print(bb)
+
+#bb.partial_meet_contraction(Not(query))
+#print(bb)
+
+#bb.partial_meet_contraction(query)
+#print(bb)
+
+
+
+
 #print("Bb:")
 #for prop in bb.clauses:
 #    print(prop.tostring())
