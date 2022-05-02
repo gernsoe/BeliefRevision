@@ -12,7 +12,7 @@ Revision is then done through further expansion, or contraction.
 
 ## How to run the program
 To run the program simply run `menu.py` by typing `py menu.py` in a terminal. Several AGM postulates have also been made,
-these can be run by running `agm_postulates.py` by typing `py agm_postulates` in a terminal.
+these can be run by running `agm_postulates.py` by typing `py agm_postulates.py` in a terminal.
 
 When running the menu file, then a menu with 6 options will be shown. In order to choose an option, type the number in front of the desired option into the terminal.
 
