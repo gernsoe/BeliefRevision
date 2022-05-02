@@ -1,4 +1,4 @@
-#Belief Revision
+# Belief Revision
 ## Introduction
 Belief Revision for the second assignment in Introduction to Artificial Intelligence course at DTU 02180 May 2022
 
