@@ -15,10 +15,10 @@ To run the program simply run `menu.py` by typing `py menu.py` in a terminal. Se
 these can be run by running `agm_postulates.py` by typing `py agm_postulates` in a terminal.
 
 When running the menu file, then a menu with 6 options will be shown. In order to choose an option, type the number in front of the desired option into the terminal.
-Each option is described in more detail [below](#Menu Options). For option 2-4, after choosing the option, you have to enter a propositional logic formula.
-The syntax for a propositional logic sentence can be seen [below](#Formula Syntax).
+Each option is described in more detail [below](#menu-options). For option 2-4, after choosing the option, you have to enter a propositional logic formula.
+The syntax for a propositional logic sentence can be seen [below](#formula-syntax).
 
-##Menu Options
+## Menu Options
 1. 'See belief base': this option will simply print the current belief base into the console
 2. 'Query knowledge base for entailment': Enter a formula that will be queried with the existing belief base
 3. 'Expand Belief Base': Enter a formula that should be added to the belief base through expansion
@@ -26,7 +26,7 @@ The syntax for a propositional logic sentence can be seen [below](#Formula Synta
 5. 'Reset Belief Base': Delete all clauses in the belief base.
 6. 'Exit': terminate the program
 
-##Formula Syntax
+## Formula Syntax
 Syntax for propositional logic sentences: 
  - Available variables are all letters from A-Z. 
  - Available operators are (the syntax is written in parentheses): not(~), and(&), or(|), implies(>>), if-and-only-if(%)
