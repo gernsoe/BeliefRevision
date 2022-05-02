@@ -111,10 +111,6 @@ class BB:
             if len(tup) == max_size:
                 remainders.append(tup)
 
-        #for tup in remainders:
-        #    for prop in tup:
-        #        print(prop.tostring(),end="")
-        #    print("")
         return remainders
 
     def expansion(self, phi):
@@ -164,6 +160,13 @@ class Proposition:
     def __init__(self, op, *vars):
         self.op = str(op)
         self.vars = vars
+
+    def __eq__(self, other):
+        if not isinstance(other, Proposition):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.op == other.op and self.vars == other.vars
+
 
     def tostring(self):
         if (len(self.vars) == 0):
@@ -287,105 +290,3 @@ def distribute(E):
             return Or(distribute(E.vars[0]), distribute(E.vars[1]))
     else:
         return E
-
-
-
-'''
-
-kb = []
-kbcnf = []
-p1 = Implies(Not(V("P")), V("Q"))
-p2 = Implies(V("Q"), V("P"))
-p3 = Implies(V("P"), And(V("R"),V("S")))
-p4 = Not(And(V("P"), And(V("R"), V("S"))))
-
-
-kb.extend([p1, p2, p3, p4])
-for e in kb:
-    kbcnf.append(convert_to_cnf(e))
-
-for c in kbcnf:
-    print(c.tostring())
-'''
-
-
-#sentence = eval(input("Input sentence ").upper())
-#bb = BB()
-#bb.tell(sentence)
-#query = eval(input("Input query ").upper())
-#print(bb.entails(query))
-
-
-
-#test1 = Implies(Not(And(V("P"), Or(Not(V("R")), V("S")))), Implies(Not(V("P")), V("Q")))
-#test2 = Not(And(V("P"), And(Not(V("R")), V("S"))))
-#test3 = And(V("P"), V("Q"))
-#test4 = V("Q")
-sentence1 = Implies(Not(V("P")), V("Q"))
-sentence2 = Implies(V("Q"), V("P"))
-sentence3 = Implies(V("P"), And(V("R"), V("S")))
-query = And(V("P"), And(V("R"), V("S")))
-
-#sentence1 = Or(V("P"), V("Q"))
-#sentence2 = Iff(V("P"), V("Q"))
-#query = V("P")
-
-#CNF = convert_to_cnf(test2)
-#print(CNF)
-bb = BB()
-bb.tell(V("A")&V("B"))
-bb.tell(V("A")&V("B"))
-print(bb)
-
-#bb.tell(sentence1)
-#bb.tell(sentence2)
-#bb.tell(sentence3)
-#print(bb.entails(bb.clauses, query))
-
-#print(bb)
-#bb.expansion(query)
-#print(bb)
-
-#bb.partial_meet_contraction(Not(query))
-#print(bb)
-
-#bb.partial_meet_contraction(query)
-#print(bb)
-
-
-
-
-#print("Bb:")
-#for prop in bb.clauses:
-#    print(prop.tostring())
-#print(query.tostring())
-#print(bb.entails(bb.clauses, query))
-#powerset = bb.generate_remainders(query)
-
-#a = bb.partial_meet_contraction(query)
-
-#print("powerset:")
-#powerset = bb.generate_remainders()
-#print(type(powerset))
-#for t in powerset:
-#    print("ny")
-
-#    for prop in t:
-#        print(prop.tostring())
-
-
-#print(bb.entails(V("P")))
-
-
-
-
-#print(to_clauses(CNF))
-#print(CNF.tostring())
-#CNF = negation_inwards(CNF)
-#print(CNF.tostring())
-#CNF = distribute(test1)
-#print(CNF.tostring())
-
-#e = input()
-#p = eval(e)
-#print(p.tostring())
