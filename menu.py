@@ -36,7 +36,7 @@ while server:
     #
 
     if Option == str(2):
-        print('Which new proposition should be added directly to the belief base (not expansion)?')
+        print('Provide a formula to check entailment')
         Proposition = eval(input())
         # Check if this is a proposition other error message and back to main menu
         # Check if the variables are within the set Vars, otherwise cannot be used.

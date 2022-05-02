@@ -13,7 +13,6 @@ class BB:
             copy_bb.clauses.append(prop)
         return copy_bb
 
-
     def __repr__(self):
         str = ""
         for prop in self.clauses:
@@ -22,9 +21,7 @@ class BB:
 
     def tell(self, prop):
         self.clauses.append(prop)
-        self.remove_dubs(self.clauses)
-        #for clause in cnf:
-        #    self.clauses.append(clause)
+        self.clauses = self.remove_dubs(self.clauses)
 
     def entails(self, knowledge, query=None):
         clauses = []
@@ -336,10 +333,14 @@ query = And(V("P"), And(V("R"), V("S")))
 #CNF = convert_to_cnf(test2)
 #print(CNF)
 bb = BB()
-bb.tell(sentence1)
-bb.tell(sentence2)
-bb.tell(sentence3)
-print(bb.entails(bb.clauses, query))
+bb.tell(V("A")&V("B"))
+bb.tell(V("A")&V("B"))
+print(bb)
+
+#bb.tell(sentence1)
+#bb.tell(sentence2)
+#bb.tell(sentence3)
+#print(bb.entails(bb.clauses, query))
 
 #print(bb)
 #bb.expansion(query)
