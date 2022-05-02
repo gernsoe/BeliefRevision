@@ -41,7 +41,7 @@ while server:
     #
 
     if Option == str(3):
-        print('Which proposition should be removed from the Belief Base?')
+        print('Which proposition should be contracted from the Belief Base?')
         print(Belief_base)
         print()
     #
