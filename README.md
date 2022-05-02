@@ -18,15 +18,15 @@ When running the menu file, then a menu with 6 options will be shown. In order t
 
 Each option is described in more detail under [menu options](#menu-options). For option 2-4, after choosing the option, you have to enter a propositional logic formula.
 
-The syntax for a propositional logic sentence can be seen under [Formula Syntax](#formula-syntax).
+The syntax for a propositional logic formula can be seen under [Formula Syntax](#formula-syntax).
 
 ## Menu Options
-1. 'See belief base': this option will simply print the current belief base into the console
+1. 'See belief base': This option will simply print the current belief base into the console
 2. 'Query knowledge base for entailment': Enter a formula that will be queried with the existing belief base
 3. 'Expand Belief Base': Enter a formula that should be added to the belief base through expansion
 4. 'Contract Belief Base': Enter a formula that should be contracted from the belief base
 5. 'Reset Belief Base': Delete all clauses in the belief base.
-6. 'Exit': terminate the program
+6. 'Exit': Terminate the program
 
 ## Formula Syntax
 Syntax for propositional logic sentences: 
