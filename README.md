@@ -1,17 +1,18 @@
 # Belief Revision
 ## Introduction
-Belief Revision for the second assignment in Introduction to Artificial Intelligence course at DTU 02180 May 2022
+Belief Revision engine for the second assignment in Introduction to Artificial Intelligence course at DTU 02180 May 2022
 
 With this project it is possible to create a belief base, query it for entailment, and to revise it.
 
-There are two possible ways to create a belief base. 
-The first one is to populate a belief base with pre-defined clauses.
+Using the agent, there are two possible ways to populate the belief base. 
+The first one is to populate a belief base with a pre-defined example from exercise 9.1 from the exercises.
 The other way is to define each clause manually through expansion.
 
 Revision is then done through further expansion, or contraction.
+When expanding the belief base, the negated input formula is first contracted from the belief base, before it is added.
 
 ## How to run the program
-To run the program simply run `menu.py` by typing `py menu.py` in a terminal. Several AGM postulates have also been made,
+To run the program simply run `menu.py` by typing `py menu.py` in a terminal. Several tests that check AGM postulates have also been made,
 these can be run by running `agm_postulates.py` by typing `py agm_postulates.py` in a terminal.
 
 When running the menu file, then a menu with 6 options will be shown. In order to choose an option, type the number in front of the desired option into the terminal.
@@ -32,5 +33,6 @@ The syntax for a propositional logic sentence can be seen under [Formula Syntax]
 Syntax for propositional logic sentences: 
  - Available variables are all letters from A-Z. 
  - Available operators are (the syntax is written in parentheses): not(~), and(&), or(|), implies(>>), if-and-only-if(%)
- Example: A&B>>E|D
+ Example: (A&B)>>(E|D)
+
  
