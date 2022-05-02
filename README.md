@@ -15,8 +15,10 @@ To run the program simply run `menu.py` by typing `py menu.py` in a terminal. Se
 these can be run by running `agm_postulates.py` by typing `py agm_postulates` in a terminal.
 
 When running the menu file, then a menu with 6 options will be shown. In order to choose an option, type the number in front of the desired option into the terminal.
-Each option is described in more detail [below](#menu-options). For option 2-4, after choosing the option, you have to enter a propositional logic formula.
-The syntax for a propositional logic sentence can be seen [below](#formula-syntax).
+
+Each option is described in more detail under [menu options](#menu-options). For option 2-4, after choosing the option, you have to enter a propositional logic formula.
+
+The syntax for a propositional logic sentence can be seen under [Formula Syntax](#formula-syntax).
 
 ## Menu Options
 1. 'See belief base': this option will simply print the current belief base into the console
